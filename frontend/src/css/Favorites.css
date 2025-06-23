@@ -33,7 +33,6 @@
   line-height: 1.6;
 }
 
-
 /* Animation for new favorites being added */
 @keyframes fadeIn {
   from {
@@ -49,4 +48,3 @@
 .movies-grid > * {
   animation: fadeIn 0.3s ease-out forwards;
 }
-
