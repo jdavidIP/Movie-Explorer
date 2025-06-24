@@ -9,11 +9,16 @@ function Home() {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [homeTitle, setHomeTitle] = useState("Trending Movies");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (pageNum = 1) => {
     try {
-      const response = await getPopularMovies();
-      setMovies(response);
+      const response = await getPopularMovies(pageNum);
+      setMovies(response.results);
+      setTotalPages(response.total_pages);
+      setError(null);
     } catch (err) {
       console.error("Failed to fetch movies.", err);
       setError(err);
@@ -22,9 +27,19 @@ function Home() {
     }
   };
 
-  useEffect(() => {
-    fetchMovies();
-  }, []);
+  const fetchSearch = async (pageNum = 1) => {
+    try {
+      const response = await searchMovies(searchQuery, page);
+      setMovies(response.results);
+      setTotalPages(response.total_pages);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to search movies.", err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -32,9 +47,11 @@ function Home() {
     if (loading) return;
 
     setLoading(true);
+    setHomeTitle("Search Results");
     try {
-      const response = await searchMovies(searchQuery);
-      setMovies(response);
+      const response = await searchMovies(searchQuery, page);
+      setMovies(response.results);
+      setTotalPages(response.total_pages);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -43,6 +60,29 @@ function Home() {
       setLoading(false);
     }
   };
+
+  const clearSearch = (e) => {
+    setSearchQuery("");
+    setPage(1);
+    setHomeTitle("Trending Movies");
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+  };
+
+  useEffect(() => {
+    if (!searchQuery) {
+      fetchMovies(page);
+    } else {
+      fetchSearch(page);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    if (!searchQuery) fetchMovies(page);
+  }, [searchQuery]);
 
   return (
     <div className="home">
@@ -57,7 +97,18 @@ function Home() {
         <button type="submit" className="search-button">
           Search
         </button>
+        <button
+          type="button"
+          className="clear-filters-button"
+          onClick={clearSearch}
+        >
+          Clear
+        </button>
       </form>
+
+      <div className="home-title">
+        <h1>{homeTitle}</h1>
+      </div>
 
       {error && <div className="error-message">{error}</div>}
 
@@ -70,6 +121,26 @@ function Home() {
           ))}
         </div>
       )}
+
+      <div
+        style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}
+      >
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}
+        >
+          Prev
+        </button>
+        <span style={{ margin: "0 1rem" }}>
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
