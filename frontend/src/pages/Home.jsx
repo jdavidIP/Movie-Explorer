@@ -49,6 +49,7 @@ function Home() {
     setLoading(true);
     setHomeTitle("Search Results");
     try {
+      setPage(1);
       const response = await searchMovies(searchQuery, page);
       setMovies(response.results);
       setTotalPages(response.total_pages);
@@ -64,7 +65,6 @@ function Home() {
   const clearSearch = (e) => {
     setSearchQuery("");
     setPage(1);
-    setHomeTitle("Trending Movies");
   };
 
   const handlePageChange = (newPage) => {
@@ -81,7 +81,10 @@ function Home() {
   }, [page]);
 
   useEffect(() => {
-    if (!searchQuery) fetchMovies(page);
+    if (!searchQuery) {
+      setHomeTitle("Trending Movies");
+      fetchMovies(page);
+    }
   }, [searchQuery]);
 
   return (
