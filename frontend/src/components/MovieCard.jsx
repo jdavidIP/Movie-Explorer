@@ -11,6 +11,7 @@ function MovieCard({ movie }) {
 
   const handleFavourite = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (favourite) {
       removeFromFavourites(movie.id);
     } else {
