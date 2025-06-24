@@ -56,4 +56,6 @@
 
 .movies-grid > * {
   animation: fadeIn 0.3s ease-out forwards;
+  max-width: 300px;
+  width: 100%;
 }
