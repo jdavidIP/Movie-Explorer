@@ -45,6 +45,15 @@
   }
 }
 
+.favorites .movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-items: center;
+}
+
 .movies-grid > * {
   animation: fadeIn 0.3s ease-out forwards;
 }
