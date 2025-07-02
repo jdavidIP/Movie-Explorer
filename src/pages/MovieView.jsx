@@ -67,7 +67,7 @@ function MovieView() {
                 : "N/A"}
             </p>
             <p>
-              <strong>Overview:</strong>{" "}
+              <strong>Synopsis:</strong>{" "}
               {movie.overview || "No synopsis available."}
             </p>
             {movie.homepage && (
