@@ -10,6 +10,28 @@ export const getPopularMovies = async (page = 1) => {
   return data;
 };
 
+export const discoverMovies = async (filters, page = 1) => {
+  const params = new URLSearchParams({
+    api_key: API_KEY,
+    page,
+    sort_by: "popularity.desc",
+    include_adult: "false",
+    include_video: "false",
+  });
+
+  if (filters.genre) params.append("with_genres", filters.genre);
+  if (filters.language)
+    params.append("with_original_language", filters.language);
+  if (filters.country) params.append("with_origin_country", filters.country);
+  if (filters.year) params.append("primary_release_year", filters.year);
+
+  const response = await fetch(
+    `${BASE_URL}/discover/movie?${params.toString()}`
+  );
+  const data = await response.json();
+  return data;
+};
+
 export const searchMovies = async (query, page = 1) => {
   const response = await fetch(
     `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(

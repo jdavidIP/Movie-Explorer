@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { useState } from "react";
 import "../css/Home.css";
-import { searchMovies, getPopularMovies, getMovie } from "../services/api";
+import {
+  searchMovies,
+  getPopularMovies,
+  discoverMovies,
+} from "../services/api";
 import Filters from "../components/Filters";
 
 function Home() {
@@ -23,25 +27,27 @@ function Home() {
   const fetchMovies = async (pageNum = 1) => {
     setLoading(true);
     try {
-      const response = await getPopularMovies(pageNum);
-
-      const moviesWithDetails = await Promise.all(
-        response.results.map(async (movie) => {
-          const details = await getMovie(movie.id);
-          return {
-            ...movie,
-            original_language: details.original_language,
-            origin_country: details.origin_country || [],
-          };
-        })
-      );
-
-      setMovies(moviesWithDetails);
-      setTotalPages(response.total_pages);
+      // If any filter is set, use discover endpoint
+      if (
+        filters.genre ||
+        filters.language ||
+        filters.country ||
+        filters.year
+      ) {
+        const response = await discoverMovies(filters, pageNum);
+        setMovies(response.results);
+        setTotalPages(response.total_pages);
+      } else {
+        const response = await getPopularMovies(pageNum);
+        setMovies(response.results);
+        setTotalPages(response.total_pages);
+      }
       setError(null);
     } catch (err) {
       console.error("Failed to fetch movies.", err);
-      setError(err);
+      setError("Failed to fetch movies.");
+      setMovies(null);
+      setTotalPages(null);
     } finally {
       setLoading(false);
     }
@@ -57,32 +63,12 @@ function Home() {
     } catch (err) {
       console.error("Failed to search movies.", err);
       setError(err);
+      setMovies(null);
+      setTotalPages(null);
     } finally {
       setLoading(false);
     }
   };
-
-  const filteredMovies = movies.filter((movie) => {
-    // Genre filter
-    if (filters.genre && !movie.genre_ids?.includes(Number(filters.genre)))
-      return false;
-    // Language filter
-    if (filters.language && movie.original_language !== filters.language)
-      return false;
-    // Country filter (origin_country is an array)
-    if (
-      filters.country &&
-      !(movie.origin_country || []).includes(filters.country)
-    )
-      return false;
-    // Year filter (release_date is "YYYY-MM-DD")
-    if (
-      filters.year &&
-      (!movie.release_date || !movie.release_date.startsWith(filters.year))
-    )
-      return false;
-    return true;
-  });
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -121,7 +107,8 @@ function Home() {
     } else {
       fetchSearch(page);
     }
-  }, [page]);
+    // eslint-disable-next-line
+  }, [page, filters]);
 
   useEffect(() => {
     if (!searchQuery) {
@@ -164,7 +151,7 @@ function Home() {
         <div className="loading">Loading...</div>
       ) : (
         <div className="movies-grid">
-          {filteredMovies.map((movie) => (
+          {movies.map((movie) => (
             <MovieCard movie={movie} key={movie.id} />
           ))}
         </div>
