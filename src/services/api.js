@@ -27,3 +27,27 @@ export const getMovie = async (movieId) => {
   const data = await response.json();
   return data;
 };
+
+export const getMovieGenres = async () => {
+  const response = await fetch(
+    `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`
+  );
+  const data = await response.json();
+  return data;
+};
+
+export const getCountries = async () => {
+  const response = await fetch(
+    `${BASE_URL}/configuration/countries?api_key=${API_KEY}`
+  );
+  const data = await response.json();
+  return data;
+};
+
+export const getLanguages = async () => {
+  const response = await fetch(
+    `${BASE_URL}/configuration/languages?api_key=${API_KEY}`
+  );
+  const data = await response.json();
+  return data;
+};

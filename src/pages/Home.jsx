@@ -2,10 +2,17 @@ import React, { useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { useState } from "react";
 import "../css/Home.css";
-import { searchMovies, getPopularMovies } from "../services/api";
+import { searchMovies, getPopularMovies, getMovie } from "../services/api";
+import Filters from "../components/Filters";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState({
+    genre: "",
+    year: "",
+    country: "",
+    language: "",
+  });
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,9 +21,22 @@ function Home() {
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchMovies = async (pageNum = 1) => {
+    setLoading(true);
     try {
       const response = await getPopularMovies(pageNum);
-      setMovies(response.results);
+
+      const moviesWithDetails = await Promise.all(
+        response.results.map(async (movie) => {
+          const details = await getMovie(movie.id);
+          return {
+            ...movie,
+            original_language: details.original_language,
+            origin_country: details.origin_country || [],
+          };
+        })
+      );
+
+      setMovies(moviesWithDetails);
       setTotalPages(response.total_pages);
       setError(null);
     } catch (err) {
@@ -27,7 +47,8 @@ function Home() {
     }
   };
 
-  const fetchSearch = async (pageNum = 1) => {
+  const fetchSearch = async () => {
+    setLoading(true);
     try {
       const response = await searchMovies(searchQuery, page);
       setMovies(response.results);
@@ -40,6 +61,28 @@ function Home() {
       setLoading(false);
     }
   };
+
+  const filteredMovies = movies.filter((movie) => {
+    // Genre filter
+    if (filters.genre && !movie.genre_ids?.includes(Number(filters.genre)))
+      return false;
+    // Language filter
+    if (filters.language && movie.original_language !== filters.language)
+      return false;
+    // Country filter (origin_country is an array)
+    if (
+      filters.country &&
+      !(movie.origin_country || []).includes(filters.country)
+    )
+      return false;
+    // Year filter (release_date is "YYYY-MM-DD")
+    if (
+      filters.year &&
+      (!movie.release_date || !movie.release_date.startsWith(filters.year))
+    )
+      return false;
+    return true;
+  });
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -109,6 +152,8 @@ function Home() {
         </button>
       </form>
 
+      <Filters filters={filters} onFilterChange={setFilters} />
+
       <div className="home-title">
         <h1>{homeTitle}</h1>
       </div>
@@ -119,7 +164,7 @@ function Home() {
         <div className="loading">Loading...</div>
       ) : (
         <div className="movies-grid">
-          {movies.map((movie) => (
+          {filteredMovies.map((movie) => (
             <MovieCard movie={movie} key={movie.id} />
           ))}
         </div>
