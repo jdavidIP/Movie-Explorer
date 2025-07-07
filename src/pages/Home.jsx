@@ -119,27 +119,33 @@ function Home() {
 
   return (
     <div className="home">
-      <form onSubmit={handleSearch} className="search-form">
-        <input
-          type="text"
-          placeholder="Search for movies..."
-          className="search-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        ></input>
-        <button type="submit" className="search-button">
-          Search
-        </button>
-        <button
-          type="button"
-          className="clear-filters-button"
-          onClick={clearSearch}
-        >
-          Clear
-        </button>
-      </form>
+      <div className="search-and-filters">
+        <form onSubmit={handleSearch} className="search-form">
+          <input
+            type="text"
+            placeholder="Search for movies..."
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          ></input>
+          <button type="submit" className="search-button">
+            Search
+          </button>
+          <button
+            type="button"
+            className="clear-filters-button"
+            onClick={clearSearch}
+          >
+            Clear
+          </button>
+        </form>
 
-      <Filters filters={filters} onFilterChange={setFilters} />
+        <Filters
+          filters={filters}
+          onFilterChange={setFilters}
+          disabled={homeTitle === "Search Results"}
+        />
+      </div>
 
       <div className="home-title">
         <h1>{homeTitle}</h1>

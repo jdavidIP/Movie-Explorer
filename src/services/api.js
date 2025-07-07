@@ -14,7 +14,7 @@ export const discoverMovies = async (filters, page = 1) => {
   const params = new URLSearchParams({
     api_key: API_KEY,
     page,
-    sort_by: "popularity.desc",
+    sort_by: "vote_count.desc",
     include_adult: "false",
     include_video: "false",
   });

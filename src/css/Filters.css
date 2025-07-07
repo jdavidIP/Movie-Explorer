@@ -1,0 +1,14 @@
+.filter-section {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.filter-section.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+}

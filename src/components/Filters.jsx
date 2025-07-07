@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { getMovieGenres, getCountries, getLanguages } from "../services/api";
+import "../css/Filters.css";
 
-function Filters({ filters, onFilterChange }) {
+function Filters({ filters, onFilterChange, disabled }) {
   const [genres, setGenres] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -13,10 +14,11 @@ function Filters({ filters, onFilterChange }) {
   }, []);
 
   return (
-    <div className="filter-section">
+    <div className={`filter-section ${disabled ? "disabled" : ""}`}>
       <select
         value={filters.genre}
         onChange={(e) => onFilterChange({ ...filters, genre: e.target.value })}
+        disabled={disabled}
       >
         <option value="">All Genres</option>
         {genres.map((g) => (
@@ -25,11 +27,13 @@ function Filters({ filters, onFilterChange }) {
           </option>
         ))}
       </select>
+
       <select
         value={filters.language}
         onChange={(e) =>
           onFilterChange({ ...filters, language: e.target.value })
         }
+        disabled={disabled}
       >
         <option value="">All Languages</option>
         {languages.map((l) => (
@@ -38,11 +42,13 @@ function Filters({ filters, onFilterChange }) {
           </option>
         ))}
       </select>
+
       <select
         value={filters.country}
         onChange={(e) =>
           onFilterChange({ ...filters, country: e.target.value })
         }
+        disabled={disabled}
       >
         <option value="">All Countries</option>
         {countries.map((c) => (
@@ -51,6 +57,7 @@ function Filters({ filters, onFilterChange }) {
           </option>
         ))}
       </select>
+
       <input
         type="number"
         placeholder="Year"
@@ -59,6 +66,7 @@ function Filters({ filters, onFilterChange }) {
         min="1900"
         max={new Date().getFullYear()}
         style={{ width: "90px" }}
+        disabled={disabled}
       />
     </div>
   );
