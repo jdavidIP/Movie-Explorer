@@ -12,7 +12,7 @@ import Filters from "../components/Filters";
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
-    genre: "",
+    genre: [],
     year: "",
     country: "",
     language: "",
@@ -27,17 +27,18 @@ function Home() {
   const fetchMovies = async (pageNum = 1) => {
     setLoading(true);
     try {
-      // If any filter is set, use discover endpoint
       if (
-        filters.genre ||
+        (filters.genre && filters.genre.length > 0) ||
         filters.language ||
         filters.country ||
         filters.year
       ) {
+        console.log("filters");
         const response = await discoverMovies(filters, pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);
       } else {
+        console.log("no filters");
         const response = await getPopularMovies(pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);

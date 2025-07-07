@@ -38,3 +38,126 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.multi-select-dropdown {
+  position: relative;
+  width: 300px;
+  font-size: 0.95rem;
+}
+
+.multi-select-dropdown.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.dropdown-toggle {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #222;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-toggle:disabled {
+  cursor: not-allowed;
+}
+
+.arrow {
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+  user-select: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background-color: #222;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 0.5rem;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  color: white;
+  font-weight: 400;
+}
+
+.dropdown-option:hover {
+  background-color: #333;
+}
+
+.dropdown-option input {
+  cursor: pointer;
+}
+
+/* New: Style native selects and input number to match multi-select dropdown */
+
+.filter-section select,
+.filter-section input[type="number"] {
+  width: 300px; /* same width as multi-select dropdown */
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #222;
+  color: white;
+  font-size: 0.95rem;
+  appearance: none; /* Remove native arrow */
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+/* Input number should have text cursor */
+.filter-section input[type="number"] {
+  cursor: text;
+}
+
+/* Hover and focus states */
+
+.filter-section select:hover,
+.filter-section input[type="number"]:hover,
+.filter-section select:focus,
+.filter-section input[type="number"]:focus {
+  outline: none;
+  border-color: #e50914;
+  box-shadow: 0 0 4px #e50914;
+  background-color: #333;
+}
+
+/* Custom dropdown arrow for select */
+
+.filter-section select {
+  background-image: linear-gradient(45deg, transparent 50%, white 50%),
+    linear-gradient(135deg, white 50%, transparent 50%),
+    linear-gradient(to right, #555, #555);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px), calc(100% - 25px) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
+  background-repeat: no-repeat;
+}
+
+/* Disabled state */
+
+.filter-section select:disabled,
+.filter-section input[type="number"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

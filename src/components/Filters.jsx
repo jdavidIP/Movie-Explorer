@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMovieGenres, getCountries, getLanguages } from "../services/api";
+import MultiSelectDropdown from "./MultiSelectDropdown";
 import "../css/Filters.css";
 
 function Filters({ filters: externalFilters, onFilterChange, disabled }) {
@@ -27,7 +28,7 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
 
   const handleClear = () => {
     const cleared = {
-      genre: "",
+      genre: [],
       language: "",
       country: "",
       year: "",
@@ -36,22 +37,21 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
     onFilterChange(cleared);
   };
 
+  const genreOptions = genres.map((g) => ({
+    value: String(g.id),
+    label: g.name,
+  }));
+
   return (
     <div className={`filter-section ${disabled ? "disabled" : ""}`}>
-      <select
-        value={localFilters.genre}
-        onChange={(e) =>
-          setLocalFilters({ ...localFilters, genre: e.target.value })
+      <MultiSelectDropdown
+        options={genreOptions}
+        selectedValues={localFilters.genre || []}
+        onChange={(newSelected) =>
+          setLocalFilters({ ...localFilters, genre: newSelected })
         }
         disabled={disabled}
-      >
-        <option value="">All Genres</option>
-        {genres.map((g) => (
-          <option key={g.id} value={g.id}>
-            {g.name}
-          </option>
-        ))}
-      </select>
+      />
 
       <select
         value={localFilters.language}
@@ -104,12 +104,6 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
           Clear Filters
         </button>
       </div>
-
-      {disabled && (
-        <div className="filters-disabled-message">
-          Filters are disabled while searching by title.
-        </div>
-      )}
     </div>
   );
 }

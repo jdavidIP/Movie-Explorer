@@ -19,7 +19,7 @@ export const discoverMovies = async (filters, page = 1) => {
     include_video: "false",
   });
 
-  if (filters.genre) params.append("with_genres", filters.genre);
+  if (filters.genre) params.append("with_genres", filters.genre.join(","));
   if (filters.language)
     params.append("with_original_language", filters.language);
   if (filters.country) params.append("with_origin_country", filters.country);
