@@ -45,15 +45,17 @@ function Home() {
         if (tab === 1) {
           setHomeTitle("Trending Movies");
           response = await getPopularMovies(pageNum);
+          setTotalPages(5);
         } else if (tab === 2) {
           setHomeTitle("Top Rated Movies");
           response = await getTopRatedMovies(pageNum);
+          setTotalPages(5);
         } else if (tab === 3) {
-          setHomeTitle("Now Playing Movies");
+          setHomeTitle("Movies Now Playing");
           response = await getNowPlayingMovies(pageNum);
+          setTotalPages(1);
         }
         setMovies(response.results);
-        setTotalPages(5);
       }
       setError(null);
     } catch (err) {
