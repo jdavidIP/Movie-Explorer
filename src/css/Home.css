@@ -92,8 +92,16 @@
   width: 100%;
 }
 
+.sort-dropdown {
+  max-width: 1200px;
+  margin: 0 auto 1rem auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .sort-dropdown select {
-  width: 300px;
+  width: 180px;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: 1px solid #555;
@@ -102,6 +110,13 @@
   font-size: 0.95rem;
   appearance: none;
   cursor: pointer;
+}
+
+.sort-dropdown.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  position: relative;
 }
 
 .sort-dropdown select:hover,
