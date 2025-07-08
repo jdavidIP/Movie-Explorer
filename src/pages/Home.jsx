@@ -102,14 +102,27 @@ function Home() {
   };
 
   useEffect(() => {
-    if (!searchQuery) {
+    if (
+      !searchQuery &&
+      !(
+        (filters.genre && filters.genre.length > 0) ||
+        filters.language ||
+        filters.country ||
+        filters.year
+      )
+    ) {
+      setHomeTitle("Trending Movies");
       fetchMovies(page);
+    } else {
+      setHomeTitle("Search Results");
+      fetchSearch(page);
     }
   }, [page, filters, sort]);
 
   useEffect(() => {
-    if (searchQuery) {
-      fetchSearch(page);
+    if (!searchQuery) {
+      setHomeTitle("Trending Movies");
+      fetchMovies(page);
     }
   }, [searchQuery, page]);
 
@@ -139,7 +152,7 @@ function Home() {
         <Filters
           filters={filters}
           onFilterChange={setFilters}
-          disabled={homeTitle === "Search Results"}
+          disabled={searchQuery}
         />
       </div>
 
