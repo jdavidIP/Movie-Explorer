@@ -60,7 +60,7 @@ function MovieView() {
               <strong>Runtime:</strong> {movie.runtime} mins
             </p>
             <p>
-              <strong>Rating:</strong> {movie.vote_average} / 10 (
+              <strong>Rating:</strong> {movie.vote_average.toFixed(2)} / 10 (
               {movie.vote_count} votes)
             </p>
             <p>
