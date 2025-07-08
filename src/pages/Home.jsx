@@ -5,6 +5,8 @@ import "../css/Home.css";
 import {
   searchMovies,
   getPopularMovies,
+  getNowPlayingMovies,
+  getTopRatedMovies,
   discoverMovies,
 } from "../services/api";
 import Filters from "../components/Filters";
@@ -22,6 +24,7 @@ function Home() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [homeTitle, setHomeTitle] = useState("Trending Movies");
+  const [tab, setTab] = useState(1); // 1 = Trending, 2 = Top Rated, 3 = Now Playing
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -34,13 +37,21 @@ function Home() {
         filters.country ||
         filters.year
       ) {
-        console.log("filter");
         const response = await discoverMovies(filters, sort, pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);
       } else {
-        console.log("no filter");
-        const response = await getPopularMovies(pageNum);
+        let response;
+        if (tab === 1) {
+          setHomeTitle("Trending Movies");
+          response = await getPopularMovies(pageNum);
+        } else if (tab === 2) {
+          setHomeTitle("Top Rated Movies");
+          response = await getTopRatedMovies(pageNum);
+        } else if (tab === 3) {
+          setHomeTitle("Now Playing Movies");
+          response = await getNowPlayingMovies(pageNum);
+        }
         setMovies(response.results);
         setTotalPages(5);
       }
@@ -93,7 +104,7 @@ function Home() {
     }
   };
 
-  const clearSearch = (e) => {
+  const clearSearch = () => {
     setSearchQuery("");
     setPage(1);
   };
@@ -103,22 +114,22 @@ function Home() {
     setPage(newPage);
   };
 
+  const handleTabChange = (tabValue) => {
+    setTab(tabValue);
+    setPage(1);
+    setFilters({ genre: [], year: "", country: "", language: "" });
+    setSort("");
+    setSearchQuery("");
+  };
+
   useEffect(() => {
     if (!searchQuery) {
-      setHomeTitle("Trending Movies");
       fetchMovies(page);
     } else {
       setHomeTitle("Search Results");
       fetchSearch(page);
     }
-  }, [page, filters, sort]);
-
-  useEffect(() => {
-    if (!searchQuery) {
-      setHomeTitle("Trending Movies");
-      fetchMovies(page);
-    }
-  }, [searchQuery, page]);
+  }, [page, filters, sort, tab]);
 
   return (
     <div className="home">
@@ -156,33 +167,56 @@ function Home() {
 
       {error && <div className="error-message">{error}</div>}
 
-      <div className="sort-dropdown">
-        <select
-          value={sort || ""}
-          onChange={(e) => setSort(e.target.value)}
-          disabled={
-            !(
-              (filters.genre && filters.genre.length > 0) ||
-              filters.language ||
-              filters.country ||
-              filters.year
-            )
-          }
-        >
-          <option value="">Sort by...</option>
-          <option value="title.asc">Title A-Z</option>
-          <option value="title.desc">Title Z-A</option>
-          <option value="popularity.asc">Popularity ↑</option>
-          <option value="popularity.desc">Popularity ↓</option>
-          <option value="revenue.asc">Revenue ↑</option>
-          <option value="revenue.desc">Revenue ↓</option>
-          <option value="primary_release_date.asc">Release Date ↑</option>
-          <option value="primary_release_date.desc">Release Date ↓</option>
-          <option value="vote_average.asc">Rating ↑</option>
-          <option value="vote_average.desc">Rating ↓</option>
-          <option value="vote_count.asc">Vote Count ↑</option>
-          <option value="vote_count.desc">Vote Count ↓</option>
-        </select>
+      <div className="tabs-sort-row">
+        <div className="tabs">
+          <button
+            className={`tab-button ${tab === 1 ? "active" : ""}`}
+            onClick={() => handleTabChange(1)}
+          >
+            Trending
+          </button>
+          <button
+            className={`tab-button ${tab === 2 ? "active" : ""}`}
+            onClick={() => handleTabChange(2)}
+          >
+            Top Rated
+          </button>
+          <button
+            className={`tab-button ${tab === 3 ? "active" : ""}`}
+            onClick={() => handleTabChange(3)}
+          >
+            Now Playing
+          </button>
+        </div>
+
+        <div className="sort-dropdown">
+          <select
+            value={sort || ""}
+            onChange={(e) => setSort(e.target.value)}
+            disabled={
+              !(
+                (filters.genre && filters.genre.length > 0) ||
+                filters.language ||
+                filters.country ||
+                filters.year
+              )
+            }
+          >
+            <option value="">Sort by...</option>
+            <option value="title.asc">Title A-Z</option>
+            <option value="title.desc">Title Z-A</option>
+            <option value="popularity.asc">Popularity ↑</option>
+            <option value="popularity.desc">Popularity ↓</option>
+            <option value="revenue.asc">Revenue ↑</option>
+            <option value="revenue.desc">Revenue ↓</option>
+            <option value="primary_release_date.asc">Release Date ↑</option>
+            <option value="primary_release_date.desc">Release Date ↓</option>
+            <option value="vote_average.asc">Rating ↑</option>
+            <option value="vote_average.desc">Rating ↓</option>
+            <option value="vote_count.asc">Vote Count ↑</option>
+            <option value="vote_count.desc">Vote Count ↓</option>
+          </select>
+        </div>
       </div>
 
       {loading ? (

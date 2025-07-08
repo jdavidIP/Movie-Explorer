@@ -10,6 +10,24 @@ export const getPopularMovies = async (page = 1) => {
   return data;
 };
 
+export const getTopRatedMovies = async (page = 1) => {
+  const response = await fetch(
+    `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&page${page}`
+  );
+  const data = await response.json();
+
+  return data;
+};
+
+export const getNowPlayingMovies = async (page = 1) => {
+  const response = await fetch(
+    `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&page${page}`
+  );
+  const data = await response.json();
+
+  return data;
+};
+
 export const discoverMovies = async (filters, sort, page = 1) => {
   const params = new URLSearchParams({
     api_key: API_KEY,
