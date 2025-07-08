@@ -57,6 +57,9 @@ function MovieView() {
               {movie.original_language?.toUpperCase()}
             </p>
             <p>
+              <strong>Runtime:</strong> {movie.runtime} mins
+            </p>
+            <p>
               <strong>Rating:</strong> {movie.vote_average} / 10 (
               {movie.vote_count} votes)
             </p>

@@ -17,6 +17,7 @@ function Home() {
     country: "",
     language: "",
   });
+  const [sort, setSort] = useState();
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,15 +34,15 @@ function Home() {
         filters.country ||
         filters.year
       ) {
-        console.log("filters");
-        const response = await discoverMovies(filters, pageNum);
+        console.log("filter");
+        const response = await discoverMovies(filters, sort, pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);
       } else {
-        console.log("no filters");
+        console.log("no filter");
         const response = await getPopularMovies(pageNum);
         setMovies(response.results);
-        setTotalPages(response.total_pages);
+        setTotalPages(5);
       }
       setError(null);
     } catch (err) {
@@ -104,19 +105,20 @@ function Home() {
 
   useEffect(() => {
     if (!searchQuery) {
+      setHomeTitle("Trending Movies");
       fetchMovies(page);
     } else {
+      setHomeTitle("Search Results");
       fetchSearch(page);
     }
-    // eslint-disable-next-line
-  }, [page, filters]);
+  }, [page, filters, sort]);
 
   useEffect(() => {
     if (!searchQuery) {
       setHomeTitle("Trending Movies");
       fetchMovies(page);
     }
-  }, [searchQuery]);
+  }, [searchQuery, page]);
 
   return (
     <div className="home">
@@ -144,7 +146,7 @@ function Home() {
         <Filters
           filters={filters}
           onFilterChange={setFilters}
-          disabled={homeTitle === "Search Results"}
+          disabled={searchQuery}
         />
       </div>
 
@@ -153,6 +155,35 @@ function Home() {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+
+      <div className="sort-dropdown">
+        <select
+          value={sort || ""}
+          onChange={(e) => setSort(e.target.value)}
+          disabled={
+            !(
+              (filters.genre && filters.genre.length > 0) ||
+              filters.language ||
+              filters.country ||
+              filters.year
+            )
+          }
+        >
+          <option value="">Sort by...</option>
+          <option value="title.asc">Title A-Z</option>
+          <option value="title.desc">Title Z-A</option>
+          <option value="popularity.asc">Popularity ↑</option>
+          <option value="popularity.desc">Popularity ↓</option>
+          <option value="revenue.asc">Revenue ↑</option>
+          <option value="revenue.desc">Revenue ↓</option>
+          <option value="primary_release_date.asc">Release Date ↑</option>
+          <option value="primary_release_date.desc">Release Date ↓</option>
+          <option value="vote_average.asc">Rating ↑</option>
+          <option value="vote_average.desc">Rating ↓</option>
+          <option value="vote_count.asc">Vote Count ↑</option>
+          <option value="vote_count.desc">Vote Count ↓</option>
+        </select>
+      </div>
 
       {loading ? (
         <div className="loading">Loading...</div>
