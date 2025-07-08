@@ -189,64 +189,80 @@ function Home() {
       {error && <div className="error-message">{error}</div>}
 
       <div className="tabs-sort-row">
-        <div className="tabs">
-          <button
-            className={`tab-button ${tab === 1 ? "active" : ""} ${
-              searching ? "disabled" : ""
-            }`}
-            onClick={() => handleTabChange(1)}
-            disabled={searching}
-          >
-            Trending
-          </button>
-          <button
-            className={`tab-button ${tab === 2 ? "active" : ""} ${
-              searching ? "disabled" : ""
-            }`}
-            onClick={() => handleTabChange(2)}
-            disabled={searching}
-          >
-            Top Rated
-          </button>
-          <button
-            className={`tab-button ${tab === 3 ? "active" : ""} ${
-              searching ? "disabled" : ""
-            }`}
-            onClick={() => handleTabChange(3)}
-            disabled={searching}
-          >
-            Now Playing
-          </button>
-        </div>
+        {!(
+          (filters.genre && filters.genre.length > 0) ||
+          filters.language ||
+          filters.country ||
+          filters.year
+        ) &&
+          !searching && (
+            <div className="tabs">
+              <button
+                className={`tab-button ${tab === 1 ? "active" : ""} ${
+                  searching ? "disabled" : ""
+                }`}
+                onClick={() => handleTabChange(1)}
+                disabled={searching}
+              >
+                Trending
+              </button>
+              <button
+                className={`tab-button ${tab === 2 ? "active" : ""} ${
+                  searching ? "disabled" : ""
+                }`}
+                onClick={() => handleTabChange(2)}
+                disabled={searching}
+              >
+                Top Rated
+              </button>
+              <button
+                className={`tab-button ${tab === 3 ? "active" : ""} ${
+                  searching ? "disabled" : ""
+                }`}
+                onClick={() => handleTabChange(3)}
+                disabled={searching}
+              >
+                Now Playing
+              </button>
+            </div>
+          )}
 
-        <div className="sort-dropdown">
-          <select
-            value={sort || ""}
-            onChange={(e) => setSort(e.target.value)}
-            disabled={
-              !(
-                (filters.genre && filters.genre.length > 0) ||
-                filters.language ||
-                filters.country ||
-                filters.year
-              )
-            }
-          >
-            <option value="">Sort by...</option>
-            <option value="title.asc">Title A-Z</option>
-            <option value="title.desc">Title Z-A</option>
-            <option value="popularity.asc">Popularity ↑</option>
-            <option value="popularity.desc">Popularity ↓</option>
-            <option value="revenue.asc">Revenue ↑</option>
-            <option value="revenue.desc">Revenue ↓</option>
-            <option value="primary_release_date.asc">Release Date ↑</option>
-            <option value="primary_release_date.desc">Release Date ↓</option>
-            <option value="vote_average.asc">Rating ↑</option>
-            <option value="vote_average.desc">Rating ↓</option>
-            <option value="vote_count.asc">Vote Count ↑</option>
-            <option value="vote_count.desc">Vote Count ↓</option>
-          </select>
-        </div>
+        {((filters.genre && filters.genre.length > 0) ||
+          filters.language ||
+          filters.country ||
+          filters.year) &&
+          !searching && (
+            <div className="sort-dropdown">
+              <select
+                value={sort || ""}
+                onChange={(e) => setSort(e.target.value)}
+                disabled={
+                  !(
+                    (filters.genre && filters.genre.length > 0) ||
+                    filters.language ||
+                    filters.country ||
+                    filters.year
+                  )
+                }
+              >
+                <option value="">Sort by...</option>
+                <option value="title.asc">Title A-Z</option>
+                <option value="title.desc">Title Z-A</option>
+                <option value="popularity.asc">Popularity ↑</option>
+                <option value="popularity.desc">Popularity ↓</option>
+                <option value="revenue.asc">Revenue ↑</option>
+                <option value="revenue.desc">Revenue ↓</option>
+                <option value="primary_release_date.asc">Release Date ↑</option>
+                <option value="primary_release_date.desc">
+                  Release Date ↓
+                </option>
+                <option value="vote_average.asc">Rating ↑</option>
+                <option value="vote_average.desc">Rating ↓</option>
+                <option value="vote_count.asc">Vote Count ↑</option>
+                <option value="vote_count.desc">Vote Count ↓</option>
+              </select>
+            </div>
+          )}
       </div>
 
       {loading ? (
