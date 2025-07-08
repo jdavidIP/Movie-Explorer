@@ -10,11 +10,11 @@ export const getPopularMovies = async (page = 1) => {
   return data;
 };
 
-export const discoverMovies = async (filters, page = 1) => {
+export const discoverMovies = async (filters, sort, page = 1) => {
   const params = new URLSearchParams({
     api_key: API_KEY,
     page,
-    sort_by: "vote_count.desc",
+    sort_by: sort,
     include_adult: "false",
     include_video: "false",
   });

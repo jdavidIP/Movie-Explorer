@@ -17,6 +17,7 @@ function Home() {
     country: "",
     language: "",
   });
+  const [sort, setSort] = useState();
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,12 +34,10 @@ function Home() {
         filters.country ||
         filters.year
       ) {
-        console.log("filters");
-        const response = await discoverMovies(filters, pageNum);
+        const response = await discoverMovies(filters, sort, pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);
       } else {
-        console.log("no filters");
         const response = await getPopularMovies(pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);
@@ -105,18 +104,14 @@ function Home() {
   useEffect(() => {
     if (!searchQuery) {
       fetchMovies(page);
-    } else {
-      fetchSearch(page);
     }
-    // eslint-disable-next-line
-  }, [page, filters]);
+  }, [page, filters, sort]);
 
   useEffect(() => {
-    if (!searchQuery) {
-      setHomeTitle("Trending Movies");
-      fetchMovies(page);
+    if (searchQuery) {
+      fetchSearch(page);
     }
-  }, [searchQuery]);
+  }, [searchQuery, page]);
 
   return (
     <div className="home">
@@ -153,6 +148,31 @@ function Home() {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+
+      {((filters.genre && filters.genre.length > 0) ||
+        filters.language ||
+        filters.country ||
+        filters.year) && (
+        <div className="sort-dropdown">
+          <select value={sort || ""} onChange={(e) => setSort(e.target.value)}>
+            <option value="">Sort by...</option>
+            <option value="original_title.asc">Title A-Z</option>
+            <option value="original_title.desc">Title Z-A</option>
+            <option value="popularity.asc">Popularity ↑</option>
+            <option value="popularity.desc">Popularity ↓</option>
+            <option value="revenue.asc">Revenue ↑</option>
+            <option value="revenue.desc">Revenue ↓</option>
+            <option value="primary_release_date.asc">Release Date ↑</option>
+            <option value="primary_release_date.desc">Release Date ↓</option>
+            <option value="title.asc">Title ↑</option>
+            <option value="title.desc">Title ↓</option>
+            <option value="vote_average.asc">Rating ↑</option>
+            <option value="vote_average.desc">Rating ↓</option>
+            <option value="vote_count.asc">Vote Count ↑</option>
+            <option value="vote_count.desc">Vote Count ↓</option>
+          </select>
+        </div>
+      )}
 
       {loading ? (
         <div className="loading">Loading...</div>
