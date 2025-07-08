@@ -20,11 +20,16 @@ function Home() {
     language: "",
   });
   const [sort, setSort] = useState();
+
   const [movies, setMovies] = useState([]);
+
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [filtering, setFiltering] = useState(false);
+  const [searching, setSearching] = useState(false);
+
+  const [tab, setTab] = useState(1);
   const [homeTitle, setHomeTitle] = useState("Trending Movies");
-  const [tab, setTab] = useState(1); // 1 = Trending, 2 = Top Rated, 3 = Now Playing
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -91,6 +96,7 @@ function Home() {
     if (loading) return;
 
     setLoading(true);
+    setSearching(true);
     setHomeTitle("Search Results");
     try {
       setPage(1);
@@ -101,6 +107,7 @@ function Home() {
     } catch (err) {
       console.error(err);
       setError("Failed to search movies...");
+      setSearching(false);
     } finally {
       setLoading(false);
     }
@@ -109,6 +116,7 @@ function Home() {
   const clearSearch = () => {
     setSearchQuery("");
     setPage(1);
+    setSearching(false);
   };
 
   const handlePageChange = (newPage) => {
@@ -126,12 +134,23 @@ function Home() {
 
   useEffect(() => {
     if (!searchQuery) {
+      ((filters.genre && filters.genre.length > 0) ||
+        filters.language ||
+        filters.country ||
+        filters.year) &&
+        setHomeTitle("Search Results");
       fetchMovies(page);
     } else {
       setHomeTitle("Search Results");
       fetchSearch(page);
     }
   }, [page, filters, sort, tab]);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      fetchMovies(page);
+    }
+  }, [searchQuery]);
 
   return (
     <div className="home">
@@ -159,7 +178,7 @@ function Home() {
         <Filters
           filters={filters}
           onFilterChange={setFilters}
-          disabled={searchQuery}
+          disabled={searching}
         />
       </div>
 
@@ -172,20 +191,29 @@ function Home() {
       <div className="tabs-sort-row">
         <div className="tabs">
           <button
-            className={`tab-button ${tab === 1 ? "active" : ""}`}
+            className={`tab-button ${tab === 1 ? "active" : ""} ${
+              searching ? "disabled" : ""
+            }`}
             onClick={() => handleTabChange(1)}
+            disabled={searching}
           >
             Trending
           </button>
           <button
-            className={`tab-button ${tab === 2 ? "active" : ""}`}
+            className={`tab-button ${tab === 2 ? "active" : ""} ${
+              searching ? "disabled" : ""
+            }`}
             onClick={() => handleTabChange(2)}
+            disabled={searching}
           >
             Top Rated
           </button>
           <button
-            className={`tab-button ${tab === 3 ? "active" : ""}`}
+            className={`tab-button ${tab === 3 ? "active" : ""} ${
+              searching ? "disabled" : ""
+            }`}
             onClick={() => handleTabChange(3)}
+            disabled={searching}
           >
             Now Playing
           </button>

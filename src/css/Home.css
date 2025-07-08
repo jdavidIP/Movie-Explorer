@@ -160,6 +160,12 @@
   transition: background-color 0.2s, color 0.2s;
 }
 
+.tab-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .tab-button:hover {
   background-color: var(--primary-color);
 }

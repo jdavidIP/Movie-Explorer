@@ -43,7 +43,7 @@ export const discoverMovies = async (filters, sort, page = 1) => {
   if (filters.country) params.append("with_origin_country", filters.country);
   if (filters.year) params.append("primary_release_year", filters.year);
   if (sort === "vote_average.asc" || sort === "vote_average.desc")
-    params.append("vote_count.gte", 100);
+    params.append("vote_count.gte", 200);
 
   const response = await fetch(
     `${BASE_URL}/discover/movie?${params.toString()}`
