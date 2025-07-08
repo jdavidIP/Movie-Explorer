@@ -2,10 +2,21 @@ import React, { useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { useState } from "react";
 import "../css/Home.css";
-import { searchMovies, getPopularMovies } from "../services/api";
+import {
+  searchMovies,
+  getPopularMovies,
+  discoverMovies,
+} from "../services/api";
+import Filters from "../components/Filters";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState({
+    genre: [],
+    year: "",
+    country: "",
+    language: "",
+  });
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,20 +25,37 @@ function Home() {
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchMovies = async (pageNum = 1) => {
+    setLoading(true);
     try {
-      const response = await getPopularMovies(pageNum);
-      setMovies(response.results);
-      setTotalPages(response.total_pages);
+      if (
+        (filters.genre && filters.genre.length > 0) ||
+        filters.language ||
+        filters.country ||
+        filters.year
+      ) {
+        console.log("filters");
+        const response = await discoverMovies(filters, pageNum);
+        setMovies(response.results);
+        setTotalPages(response.total_pages);
+      } else {
+        console.log("no filters");
+        const response = await getPopularMovies(pageNum);
+        setMovies(response.results);
+        setTotalPages(response.total_pages);
+      }
       setError(null);
     } catch (err) {
       console.error("Failed to fetch movies.", err);
-      setError(err);
+      setError("Failed to fetch movies.");
+      setMovies(null);
+      setTotalPages(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchSearch = async (pageNum = 1) => {
+  const fetchSearch = async () => {
+    setLoading(true);
     try {
       const response = await searchMovies(searchQuery, page);
       setMovies(response.results);
@@ -36,6 +64,8 @@ function Home() {
     } catch (err) {
       console.error("Failed to search movies.", err);
       setError(err);
+      setMovies(null);
+      setTotalPages(null);
     } finally {
       setLoading(false);
     }
@@ -78,7 +108,8 @@ function Home() {
     } else {
       fetchSearch(page);
     }
-  }, [page]);
+    // eslint-disable-next-line
+  }, [page, filters]);
 
   useEffect(() => {
     if (!searchQuery) {
@@ -89,25 +120,33 @@ function Home() {
 
   return (
     <div className="home">
-      <form onSubmit={handleSearch} className="search-form">
-        <input
-          type="text"
-          placeholder="Search for movies..."
-          className="search-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        ></input>
-        <button type="submit" className="search-button">
-          Search
-        </button>
-        <button
-          type="button"
-          className="clear-filters-button"
-          onClick={clearSearch}
-        >
-          Clear
-        </button>
-      </form>
+      <div className="search-and-filters">
+        <form onSubmit={handleSearch} className="search-form">
+          <input
+            type="text"
+            placeholder="Search for movies..."
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          ></input>
+          <button type="submit" className="search-button">
+            Search
+          </button>
+          <button
+            type="button"
+            className="clear-filters-button"
+            onClick={clearSearch}
+          >
+            Clear
+          </button>
+        </form>
+
+        <Filters
+          filters={filters}
+          onFilterChange={setFilters}
+          disabled={homeTitle === "Search Results"}
+        />
+      </div>
 
       <div className="home-title">
         <h1>{homeTitle}</h1>
