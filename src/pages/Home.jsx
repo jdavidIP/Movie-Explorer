@@ -34,10 +34,12 @@ function Home() {
         filters.country ||
         filters.year
       ) {
+        console.log("filter");
         const response = await discoverMovies(filters, sort, pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);
       } else {
+        console.log("no filter");
         const response = await getPopularMovies(pageNum);
         setMovies(response.results);
         setTotalPages(response.total_pages);
@@ -102,15 +104,7 @@ function Home() {
   };
 
   useEffect(() => {
-    if (
-      !searchQuery &&
-      !(
-        (filters.genre && filters.genre.length > 0) ||
-        filters.language ||
-        filters.country ||
-        filters.year
-      )
-    ) {
+    if (!searchQuery) {
       setHomeTitle("Trending Movies");
       fetchMovies(page);
     } else {
