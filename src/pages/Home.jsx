@@ -42,7 +42,7 @@ function Home() {
         console.log("no filter");
         const response = await getPopularMovies(pageNum);
         setMovies(response.results);
-        setTotalPages(response.total_pages);
+        setTotalPages(5);
       }
       setError(null);
     } catch (err) {
