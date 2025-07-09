@@ -19,31 +19,31 @@ This is a modern React application that lets you discover, search, filter, and b
 ## 📂 Project Structure
 
 ```bash
-src/
-├─ assets/
-├─ components/
-│ ├─ Filters.jsx
-│ ├─ MovieCard.jsx
-│ ├─ MultiSelectDropdown.jsx
-│ ├─ NavBar.jsx
-├─ contexts/
-│ └─ MovieContexts.jsx
-├─ css/
-│ ├─ App.css
-│ ├─ Favorites.css
-│ ├─ Home.css
-│ ├─ Index.css
-│ ├─ MovieCard.css
-│ ├─ MovieView.css
-│ ├─ NavBar.css
-├─ pages/
-│ ├─ Favourites.jsx
-│ ├─ Home.jsx
-│ ├─ MovieView.jsx
-├─ services/
-│ └─ api.js
-├─ App.jsx
-└─ main.jsx
+/src
+  ├── assets               # Static assets (images, icons, etc.)
+  ├── components           # Reusable UI components
+  │   ├── Filters.jsx
+  │   ├── MovieCard.jsx
+  │   ├── MultiSelectDropdown.jsx
+  │   └── NavBar.jsx
+  ├── contexts             # React Context for global state
+  │   └── MovieContexts.jsx
+  ├── css                  # All CSS modules or stylesheets
+  │   ├── App.css
+  │   ├── Favorites.css
+  │   ├── Home.css
+  │   ├── Index.css
+  │   ├── MovieCard.css
+  │   ├── MovieView.css
+  │   └── NavBar.css
+  ├── pages                # Route-level pages
+  │   ├── Favourites.jsx
+  │   ├── Home.jsx
+  │   └── MovieView.jsx
+  ├── services             # API calls and external services
+  │   └── api.js
+  ├── App.jsx              # Main App shell
+  └── main.jsx             # Entry point
 ```
 
 ---
@@ -78,3 +78,13 @@ Your app should now be running at http://localhost:5173 ✨
 ## 🙌 Acknowledgements
 - Powered by the TMDB API.
 - Built with React and Vite.
+
+---
+
+## 🧑‍💻 Author
+
+**Jose Ibanez**
+
+[My GitHub](https://github.com/jdavidIP)
+
+[My LinkedIn](https://www.linkedin.com/in/jose-ibanez-polo-622314253/)
