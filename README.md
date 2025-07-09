@@ -1,6 +1,14 @@
 # 🎬 Movie Explorer
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit-blue)](https://movie-explorer-lac-xi.vercel.app)
+
 This is a modern React application that lets you discover, search, filter, and browse movies using the [TMDB API](https://www.themoviedb.org/)
+
+---
+
+## 🚀 Live Demo
+
+Try the app live here: [https://movie-explorer-lac-xi.vercel.app](https://movie-explorer-lac-xi.vercel.app)
 
 ---
 
