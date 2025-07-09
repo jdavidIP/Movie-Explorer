@@ -1,12 +1,80 @@
-# React + Vite
+# 🎬 Movie Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a modern React application that lets you discover, search, filter, and browse movies using the [TMDB API](https://www.themoviedb.org/)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- 🔍 **Search movies** by title.
+- 🎭 **Filter** by genre, language, country, and release year.
+- 🔝 **Browse** trending, top-rated, and now-playing tabs.
+- ❤️ Mark movies as **favourites** to save them in a special tab.
+- 📊 **Sort** by popularity, revenue, rating, vote count, or release date.
+- ⏩ **Pagination** to navigate through results.
+- ⚡ Built with **React + Vite** for fast, modern development.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📂 Project Structure
+
+```bash
+src/
+├─ assets/
+├─ components/
+│ ├─ Filters.jsx
+│ ├─ MovieCard.jsx
+│ ├─ MultiSelectDropdown.jsx
+│ ├─ NavBar.jsx
+├─ contexts/
+│ └─ MovieContexts.jsx
+├─ css/
+│ ├─ App.css
+│ ├─ Favorites.css
+│ ├─ Home.css
+│ ├─ Index.css
+│ ├─ MovieCard.css
+│ ├─ MovieView.css
+│ ├─ NavBar.css
+├─ pages/
+│ ├─ Favourites.jsx
+│ ├─ Home.jsx
+│ ├─ MovieView.jsx
+├─ services/
+│ └─ api.js
+├─ App.jsx
+└─ main.jsx
+```
+
+---
+
+## ⚙️ Local Development
+
+1️⃣ **Clone the repository**
+```bash
+git clone https://github.com/your-username/movie-explorer.git
+cd movie-explorer
+```
+
+2️⃣ **Install dependencies**
+```bash
+npm install
+```
+
+3️⃣ **Create a .env file**
+```env
+VITE_TMDB_API_KEY=your_tmdb_api_key_here
+```
+
+4️⃣ **Start the dev server**
+```bash
+npm run dev
+```
+
+Your app should now be running at http://localhost:5173 ✨
+
+---
+
+## 🙌 Acknowledgements
+- Powered by the TMDB API.
+- Built with React and Vite.
