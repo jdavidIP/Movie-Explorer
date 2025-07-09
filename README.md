@@ -52,7 +52,7 @@ This is a modern React application that lets you discover, search, filter, and b
 
 1️⃣ **Clone the repository**
 ```bash
-git clone https://github.com/your-username/movie-explorer.git
+git clone https://github.com/jdavidIP/movie-explorer.git
 cd movie-explorer
 ```
 
