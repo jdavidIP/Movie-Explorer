@@ -75,6 +75,13 @@ Your app should now be running at http://localhost:5173 ✨
 
 ---
 
+## 🚀 Deployment
+
+This project is deployed on Vercel.
+No server is needed — API requests hit TMDB directly.
+
+---
+
 ## 🙌 Acknowledgements
 - Powered by the TMDB API.
 - Built with React and Vite.
