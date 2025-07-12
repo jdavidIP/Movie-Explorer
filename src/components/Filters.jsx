@@ -111,13 +111,18 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
           disabled={disabled}
         />
 
-        <CustomDropdown
-          options={[{ value: "", label: "All Countries" }, ...countryOptions]}
-          value={localFilters.country}
-          onChange={(value) =>
-            setLocalFilters({ ...localFilters, country: value })
+        <MultiSelectDropdown
+          options={countries.map((c) => ({
+            value: c.iso_3166_1,
+            label: c.english_name,
+          }))}
+          selectedValues={localFilters.country || []}
+          onChange={(newSelected) =>
+            setLocalFilters({
+              ...localFilters,
+              country: newSelected,
+            })
           }
-          placeholder="Select Country"
           disabled={disabled}
         />
 
@@ -143,31 +148,38 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
 
       {/* Active Filter Chips */}
       <div className="active-filters">
-        {localFilters.genre.map((g) => (
-          <div key={g} className="filter-chip">
-            {getLabel("genre", g)}
-            <span
-              className="remove-chip"
-              onClick={() => handleRemoveFilter("genre", g)}
-            >
-              ×
-            </span>
-          </div>
-        ))}
-        {["language", "country", "year"].map(
-          (key) =>
-            localFilters[key] && (
-              <div key={key} className="filter-chip">
-                {getLabel(key, localFilters[key])}
+        {["genre", "language", "country", "year"].map((key) => {
+          const filterValue = localFilters[key];
+
+          if (Array.isArray(filterValue)) {
+            // For multi-select filters like country
+            return filterValue.map((val) => (
+              <div key={`${key}-${val}`} className="filter-chip">
+                {getLabel(key, val)}
                 <span
                   className="remove-chip"
-                  onClick={() => handleRemoveFilter(key)}
+                  onClick={() => handleRemoveFilter(key, val)}
                 >
                   ×
                 </span>
               </div>
-            )
-        )}
+            ));
+          } else if (filterValue) {
+            return (
+              <div key={key} className="filter-chip">
+                {getLabel(key, filterValue)}
+                <span
+                  className="remove-chip"
+                  onClick={() => handleRemoveFilter(key, filterValue)}
+                >
+                  ×
+                </span>
+              </div>
+            );
+          }
+
+          return null;
+        })}
       </div>
     </div>
   );
