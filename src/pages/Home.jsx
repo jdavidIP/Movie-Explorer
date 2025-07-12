@@ -10,6 +10,7 @@ import {
   discoverMovies,
 } from "../services/api";
 import Filters from "../components/Filters";
+import MovieView from "../components/MovieView";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,10 +23,10 @@ function Home() {
   const [sort, setSort] = useState();
 
   const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filtering, setFiltering] = useState(false);
   const [searching, setSearching] = useState(false);
 
   const [tab, setTab] = useState(1);
@@ -270,7 +271,11 @@ function Home() {
       ) : (
         <div className="movies-grid">
           {movies.map((movie) => (
-            <MovieCard movie={movie} key={movie.id} />
+            <MovieCard
+              movie={movie}
+              key={movie.id}
+              onSelect={setSelectedMovie}
+            />
           ))}
         </div>
       )}
@@ -294,6 +299,13 @@ function Home() {
           Next
         </button>
       </div>
+
+      {selectedMovie && (
+        <MovieView
+          movie={selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+        />
+      )}
     </div>
   );
 }

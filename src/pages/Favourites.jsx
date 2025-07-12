@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import "../css/Favorites.css";
 import { useMovieContext } from "../contexts/MovieContexts";
 import MovieCard from "../components/MovieCard";
+import MovieView from "../components/MovieView";
 
 function Favourites() {
   const { favourites } = useMovieContext();
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   return (
     <>
       {favourites.length > 0 ? (
         <div className="favorites">
-          <h2>Your Favourites</h2>
+          <h2 className="favorites-title">Your Favourites</h2>
           <div className="movies-grid">
             {favourites.map((movie) => (
-              <MovieCard movie={movie} key={movie.id} />
+              <MovieCard
+                movie={movie}
+                key={movie.id}
+                onSelect={setSelectedMovie}
+              />
             ))}
           </div>
+
+          {selectedMovie && (
+            <MovieView
+              movie={selectedMovie}
+              onClose={() => setSelectedMovie(null)}
+            />
+          )}
         </div>
       ) : (
         <div className="favorites-empty">

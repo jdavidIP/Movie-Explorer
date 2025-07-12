@@ -1,6 +1,7 @@
 :root {
   --primary-color: #565cd7a6;
   --primary-color-hover: #434ac894;
+  --color-text: #656dfa;
 }
 
 .filter-section {
