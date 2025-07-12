@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getMovieGenres, getCountries, getLanguages } from "../services/api";
 import MultiSelectDropdown from "./MultiSelectDropdown";
+import CustomDropdown from "./CustomDropdown";
 import "../css/Filters.css";
 
 function Filters({ filters: externalFilters, onFilterChange, disabled }) {
@@ -8,7 +9,6 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
   const [languages, setLanguages] = useState([]);
   const [countries, setCountries] = useState([]);
 
-  // Local internal state to let user change filters before applying
   const [localFilters, setLocalFilters] = useState(externalFilters);
 
   useEffect(() => {
@@ -17,7 +17,6 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
     getCountries().then((res) => setCountries(res || []));
   }, []);
 
-  // When external filters change (e.g. on Clear), sync local state
   useEffect(() => {
     setLocalFilters(externalFilters);
   }, [externalFilters]);
@@ -42,6 +41,16 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
     label: g.name,
   }));
 
+  const languageOptions = languages.map((l) => ({
+    value: l.iso_639_1,
+    label: l.english_name,
+  }));
+
+  const countryOptions = countries.map((c) => ({
+    value: c.iso_3166_1,
+    label: c.english_name,
+  }));
+
   return (
     <div className={`filter-section ${disabled ? "disabled" : ""}`}>
       <MultiSelectDropdown
@@ -53,35 +62,25 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
         disabled={disabled}
       />
 
-      <select
+      <CustomDropdown
+        options={[{ value: "", label: "All Languages" }, ...languageOptions]}
         value={localFilters.language}
-        onChange={(e) =>
-          setLocalFilters({ ...localFilters, language: e.target.value })
+        onChange={(value) =>
+          setLocalFilters({ ...localFilters, language: value })
         }
+        placeholder="Select Language"
         disabled={disabled}
-      >
-        <option value="">All Languages</option>
-        {languages.map((l) => (
-          <option key={l.iso_639_1} value={l.iso_639_1}>
-            {l.english_name}
-          </option>
-        ))}
-      </select>
+      />
 
-      <select
+      <CustomDropdown
+        options={[{ value: "", label: "All Countries" }, ...countryOptions]}
         value={localFilters.country}
-        onChange={(e) =>
-          setLocalFilters({ ...localFilters, country: e.target.value })
+        onChange={(value) =>
+          setLocalFilters({ ...localFilters, country: value })
         }
+        placeholder="Select Country"
         disabled={disabled}
-      >
-        <option value="">All Countries</option>
-        {countries.map((c) => (
-          <option key={c.iso_3166_1} value={c.iso_3166_1}>
-            {c.english_name}
-          </option>
-        ))}
-      </select>
+      />
 
       <input
         type="number"
@@ -92,7 +91,6 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
         }
         min="1900"
         max={new Date().getFullYear()}
-        style={{ width: "90px" }}
         disabled={disabled}
       />
 

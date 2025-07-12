@@ -249,8 +249,6 @@ function Home() {
                 <option value="">Sort by...</option>
                 <option value="title.asc">Title A-Z</option>
                 <option value="title.desc">Title Z-A</option>
-                <option value="popularity.asc">Popularity ↑</option>
-                <option value="popularity.desc">Popularity ↓</option>
                 <option value="revenue.asc">Revenue ↑</option>
                 <option value="revenue.desc">Revenue ↓</option>
                 <option value="primary_release_date.asc">Release Date ↑</option>
