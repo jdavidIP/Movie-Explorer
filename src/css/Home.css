@@ -98,6 +98,13 @@
   justify-items: center;
 }
 
+.sort-dropdown {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
 .sort-dropdown select {
   width: 200px;
   padding: 0.6rem 1rem;

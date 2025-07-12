@@ -148,10 +148,10 @@ function Home() {
   }, [page, filters, sort, tab]);
 
   useEffect(() => {
-    if (!searchQuery) {
+    if (!searchQuery && !searching) {
       fetchMovies(page);
     }
-  }, [searchQuery]);
+  }, [searchQuery, searching]);
 
   return (
     <div className="home">
