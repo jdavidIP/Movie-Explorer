@@ -1,14 +1,20 @@
+:root {
+  --primary-color: #565cd7a6;
+  --primary-color-hover: #434ac894;
+  --color-text: #656dfa;
+}
+
 .favorites {
   padding: 2rem;
   width: 100%;
   box-sizing: border-box;
 }
 
-.favorites h2 {
+.favorites .favorites-title {
   margin-bottom: 2rem;
   text-align: center;
   font-size: 2.5rem;
-  color: #ffffff;
+  color: var(--color-text);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -24,7 +30,7 @@
 .favorites-empty h2 {
   margin-bottom: 1rem;
   font-size: 2rem;
-  color: #e50914;
+  color: var(--color-text);
 }
 
 .favorites-empty p {

@@ -10,6 +10,7 @@ import {
   discoverMovies,
 } from "../services/api";
 import Filters from "../components/Filters";
+import MovieView from "../components/MovieView";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,11 +23,12 @@ function Home() {
   const [sort, setSort] = useState();
 
   const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filtering, setFiltering] = useState(false);
   const [searching, setSearching] = useState(false);
+  const [filtering, setFiltering] = useState(false);
 
   const [tab, setTab] = useState(1);
   const [homeTitle, setHomeTitle] = useState("Trending Movies");
@@ -43,6 +45,7 @@ function Home() {
         filters.year
       ) {
         const response = await discoverMovies(filters, sort, pageNum);
+        setFiltering(true);
         setMovies(response.results);
         setTotalPages(response.total_pages);
       } else {
@@ -60,6 +63,7 @@ function Home() {
           response = await getNowPlayingMovies(pageNum);
           setTotalPages(1);
         }
+        setFiltering(false);
         setMovies(response.results);
       }
       setError(null);
@@ -139,18 +143,20 @@ function Home() {
         filters.country ||
         filters.year) &&
         setHomeTitle("Search Results");
+      setFiltering(true);
       fetchMovies(page);
     } else {
+      setFiltering(false);
       setHomeTitle("Search Results");
       fetchSearch(page);
     }
   }, [page, filters, sort, tab]);
 
   useEffect(() => {
-    if (!searchQuery) {
+    if (!searchQuery && !searching) {
       fetchMovies(page);
     }
-  }, [searchQuery]);
+  }, [searchQuery, searching]);
 
   return (
     <div className="home">
@@ -162,14 +168,16 @@ function Home() {
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            disabled={filtering}
           ></input>
-          <button type="submit" className="search-button">
+          <button type="submit" className="search-button" disabled={filtering}>
             Search
           </button>
           <button
             type="button"
             className="clear-filters-button"
             onClick={clearSearch}
+            disabled={filtering}
           >
             Clear
           </button>
@@ -248,8 +256,6 @@ function Home() {
                 <option value="">Sort by...</option>
                 <option value="title.asc">Title A-Z</option>
                 <option value="title.desc">Title Z-A</option>
-                <option value="popularity.asc">Popularity ↑</option>
-                <option value="popularity.desc">Popularity ↓</option>
                 <option value="revenue.asc">Revenue ↑</option>
                 <option value="revenue.desc">Revenue ↓</option>
                 <option value="primary_release_date.asc">Release Date ↑</option>
@@ -270,7 +276,11 @@ function Home() {
       ) : (
         <div className="movies-grid">
           {movies.map((movie) => (
-            <MovieCard movie={movie} key={movie.id} />
+            <MovieCard
+              movie={movie}
+              key={movie.id}
+              onSelect={setSelectedMovie}
+            />
           ))}
         </div>
       )}
@@ -294,6 +304,13 @@ function Home() {
           Next
         </button>
       </div>
+
+      {selectedMovie && (
+        <MovieView
+          movie={selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+        />
+      )}
     </div>
   );
 }

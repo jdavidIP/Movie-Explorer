@@ -1,6 +1,14 @@
 :root {
-  --primary-color: #565cd7a6;
+  --primary-color: #656dfa;
   --primary-color-hover: #434ac894;
+  --secondary-color: #222;
+  --input-bg: #1e1e1e;
+  --input-border: #555;
+  --input-hover: #333;
+  --chip-bg: #333;
+  --chip-text: #fff;
+  --chip-remove-bg: #e50914;
+  --chip-remove-hover: #c40811;
 }
 
 .filter-section {
@@ -8,76 +16,45 @@
   gap: 1rem;
   align-items: center;
   flex-wrap: wrap;
-  margin: 1rem 0;
+  justify-content: center;
+  background: rgba(30, 30, 30, 0.8);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .filter-section.disabled {
   opacity: 0.5;
   pointer-events: none;
-  user-select: none;
+}
+
+.multi-select-dropdown,
+.custom-select {
   position: relative;
-}
-
-.filter-buttons {
-  display: flex;
-  gap: 0.5rem;
-  margin-left: 1rem; /* some spacing from inputs */
-}
-
-.filter-buttons button {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.filter-buttons button:hover:not(:disabled) {
-  background-color: var(--primary-color);
-}
-
-.filter-buttons button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.multi-select-dropdown {
-  position: relative;
-  width: 300px;
+  width: 240px;
   font-size: 0.95rem;
 }
 
-.multi-select-dropdown.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  user-select: none;
-}
-
-.dropdown-toggle {
+.dropdown-toggle,
+.custom-select button {
   width: 100%;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background-color: #222;
-  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: #fff;
   text-align: left;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
-.dropdown-toggle:disabled {
-  cursor: not-allowed;
-}
-
-.arrow {
-  margin-left: 0.5rem;
-  font-size: 0.7rem;
-  user-select: none;
+.dropdown-toggle:hover,
+.custom-select button:hover {
+  border-color: var(--primary-color);
+  background-color: var(--input-hover);
 }
 
 .dropdown-menu {
@@ -87,12 +64,12 @@
   right: 0;
   max-height: 220px;
   overflow-y: auto;
-  background-color: #222;
-  border: 1px solid #555;
+  background-color: var(--secondary-color);
+  border: 1px solid var(--input-border);
   border-radius: 4px;
   padding: 0.5rem;
   z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
 }
 
 .dropdown-option {
@@ -107,57 +84,94 @@
 }
 
 .dropdown-option:hover {
-  background-color: #333;
+  background-color: var(--input-hover);
 }
 
-.dropdown-option input {
-  cursor: pointer;
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
 }
 
-/* Native selects and number inputs styled to match multi-select */
-
-.filter-section select,
-.filter-section input[type="number"] {
-  width: 300px; /* same width for consistency */
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background-color: #222;
+.filter-buttons button {
+  background-color: var(--primary-color);
   color: white;
-  font-size: 0.95rem;
-  appearance: none;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px; /* pill shape */
+  font-weight: 500;
   cursor: pointer;
-  margin-bottom: 0.5rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.filter-section input[type="number"] {
-  cursor: text;
+.filter-buttons button:hover {
+  background-color: var(--primary-color-hover);
+  transform: scale(1.05);
 }
 
-.filter-section select:hover,
-.filter-section input[type="number"]:hover,
-.filter-section select:focus,
-.filter-section input[type="number"]:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 4px var(--primary-color);
-  background-color: #333;
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
-/* Custom dropdown arrow */
-
-.filter-section select {
-  background-image: linear-gradient(45deg, transparent 50%, white 50%),
-    linear-gradient(135deg, white 50%, transparent 50%),
-    linear-gradient(to right, #555, #555);
-  background-position: calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px), calc(100% - 25px) 0.5em;
-  background-size: 5px 5px, 5px 5px, 1px 1.5em;
-  background-repeat: no-repeat;
+.filter-chip {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-.filter-section select:disabled,
-.filter-section input[type="number"]:disabled {
+.remove-chip {
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.remove-chip:hover {
+  color: var(--primary-color-hover);
+}
+
+.filter-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filter-section.disabled,
+.multi-select-dropdown.disabled,
+.custom-select.disabled {
   opacity: 0.5;
+  pointer-events: none;
+}
+
+.filter-buttons button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
+  background-color: rgba(100, 100, 100, 0.4);
+}
+
+.filter-chip.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .multi-select-dropdown,
+  .custom-select,
+  input[type="number"] {
+    width: 100%;
+  }
 }
