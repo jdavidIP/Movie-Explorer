@@ -28,6 +28,7 @@ function Home() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searching, setSearching] = useState(false);
+  const [filtering, setFiltering] = useState(false);
 
   const [tab, setTab] = useState(1);
   const [homeTitle, setHomeTitle] = useState("Trending Movies");
@@ -44,6 +45,7 @@ function Home() {
         filters.year
       ) {
         const response = await discoverMovies(filters, sort, pageNum);
+        setFiltering(true);
         setMovies(response.results);
         setTotalPages(response.total_pages);
       } else {
@@ -61,6 +63,7 @@ function Home() {
           response = await getNowPlayingMovies(pageNum);
           setTotalPages(1);
         }
+        setFiltering(false);
         setMovies(response.results);
       }
       setError(null);
@@ -140,8 +143,10 @@ function Home() {
         filters.country ||
         filters.year) &&
         setHomeTitle("Search Results");
+      setFiltering(true);
       fetchMovies(page);
     } else {
+      setFiltering(false);
       setHomeTitle("Search Results");
       fetchSearch(page);
     }
@@ -163,14 +168,16 @@ function Home() {
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            disabled={filtering}
           ></input>
-          <button type="submit" className="search-button">
+          <button type="submit" className="search-button" disabled={filtering}>
             Search
           </button>
           <button
             type="button"
             className="clear-filters-button"
             onClick={clearSearch}
+            disabled={filtering}
           >
             Clear
           </button>

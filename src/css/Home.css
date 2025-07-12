@@ -89,6 +89,37 @@
   background-color: #c40811;
 }
 
+.search-and-filters.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.search-form.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.search-input:disabled,
+.search-button:disabled,
+.clear-filters-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-button:disabled,
+.clear-filters-button:disabled {
+  background-color: rgba(100, 100, 100, 0.4);
+}
+
+.tab-button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  background-color: rgba(100, 100, 100, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .movies-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

@@ -144,6 +144,24 @@
   align-items: center;
 }
 
+.filter-section.disabled,
+.multi-select-dropdown.disabled,
+.custom-select.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.filter-buttons button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: rgba(100, 100, 100, 0.4);
+}
+
+.filter-chip.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .filter-section {
