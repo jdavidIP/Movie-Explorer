@@ -30,8 +30,10 @@ Try the app live here: [https://movie-explorer-lac-xi.vercel.app](https://movie-
 /src
   ├── assets               # Static assets (images, icons, etc.)
   ├── components           # Reusable UI components
+  │   ├── CustomDropdown.jsx
   │   ├── Filters.jsx
   │   ├── MovieCard.jsx
+  │   └── MovieView.jsx
   │   ├── MultiSelectDropdown.jsx
   │   └── NavBar.jsx
   ├── contexts             # React Context for global state
@@ -39,6 +41,7 @@ Try the app live here: [https://movie-explorer-lac-xi.vercel.app](https://movie-
   ├── css                  # All CSS modules or stylesheets
   │   ├── App.css
   │   ├── Favorites.css
+  │   ├── Filters.css
   │   ├── Home.css
   │   ├── Index.css
   │   ├── MovieCard.css
@@ -46,8 +49,7 @@ Try the app live here: [https://movie-explorer-lac-xi.vercel.app](https://movie-
   │   └── NavBar.css
   ├── pages                # Route-level pages
   │   ├── Favourites.jsx
-  │   ├── Home.jsx
-  │   └── MovieView.jsx
+  │   └── Home.jsx
   ├── services             # API calls and external services
   │   └── api.js
   ├── App.jsx              # Main App shell
