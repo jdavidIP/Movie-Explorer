@@ -94,9 +94,26 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
       <div className="filter-section">
         <MultiSelectDropdown
           options={genreOptions}
+          field="genres"
           selectedValues={localFilters.genre || []}
           onChange={(newSelected) =>
             setLocalFilters({ ...localFilters, genre: newSelected })
+          }
+          disabled={disabled}
+        />
+
+        <MultiSelectDropdown
+          options={countries.map((c) => ({
+            value: c.iso_3166_1,
+            label: c.english_name,
+          }))}
+          field="countries"
+          selectedValues={localFilters.country || []}
+          onChange={(newSelected) =>
+            setLocalFilters({
+              ...localFilters,
+              country: newSelected,
+            })
           }
           disabled={disabled}
         />
@@ -108,21 +125,6 @@ function Filters({ filters: externalFilters, onFilterChange, disabled }) {
             setLocalFilters({ ...localFilters, language: value })
           }
           placeholder="Select Language"
-          disabled={disabled}
-        />
-
-        <MultiSelectDropdown
-          options={countries.map((c) => ({
-            value: c.iso_3166_1,
-            label: c.english_name,
-          }))}
-          selectedValues={localFilters.country || []}
-          onChange={(newSelected) =>
-            setLocalFilters({
-              ...localFilters,
-              country: newSelected,
-            })
-          }
           disabled={disabled}
         />
 

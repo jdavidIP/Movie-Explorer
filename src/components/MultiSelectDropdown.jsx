@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 
-function MultiSelectDropdown({ options, selectedValues, onChange, disabled }) {
+function MultiSelectDropdown({
+  options,
+  field,
+  selectedValues,
+  onChange,
+  disabled,
+}) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
 
@@ -27,7 +33,8 @@ function MultiSelectDropdown({ options, selectedValues, onChange, disabled }) {
     options
       .filter((o) => selectedValues.includes(o.value))
       .map((o) => o.label)
-      .join(", ") || "Select genres";
+      .join(", ") ||
+    (field === "genres" ? "Select genres" : "Select countries");
 
   return (
     <div
