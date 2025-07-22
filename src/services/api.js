@@ -94,3 +94,13 @@ export const getLanguages = async () => {
   const data = await response.json();
   return data;
 };
+
+export async function getPlatforms(imdbId) {
+  const response = await fetch(
+    `/api/imdb_platform_scrapper?movie_id=${imdbId}`
+  );
+
+  if (!response.ok) throw new Error("Failed to fetch platforms");
+  const data = await response.json();
+  return data.platforms;
+}

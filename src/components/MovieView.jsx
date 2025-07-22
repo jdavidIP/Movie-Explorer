@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { getMovie } from "../services/api";
+import { getMovie, getPlatforms } from "../services/api"; // added getPlatforms
 import "../css/MovieView.css";
 import MovieCard from "./MovieCard";
 
 function MovieView({ movie, onClose }) {
   const [fullMovie, setFullMovie] = useState(movie); // start with partial data
+  const [platforms, setPlatforms] = useState([]); // NEW: platforms state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -13,6 +14,18 @@ function MovieView({ movie, onClose }) {
     try {
       const response = await getMovie(movie.id); // fetch full details
       setFullMovie(response);
+
+      // If movie has IMDb ID, fetch platforms
+      if (response.imdb_id) {
+        try {
+          const platformsResponse = await getPlatforms(response.imdb_id);
+          setPlatforms(platformsResponse);
+        } catch (platformErr) {
+          console.error("Failed to fetch platforms.", platformErr);
+          setPlatforms([]); // fallback to empty if API fails
+        }
+      }
+
       setError(null);
     } catch (err) {
       console.error("Failed to get movie.", err);
@@ -29,14 +42,8 @@ function MovieView({ movie, onClose }) {
   if (!movie) return null;
 
   return (
-    <div
-      className="modal-overlay"
-      onClick={onClose} // close modal when clicking outside
-    >
-      <div
-        className="modal-content"
-        onClick={(e) => e.stopPropagation()} // prevent closing on inner click
-      >
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-btn" onClick={onClose}>
           ✖
         </button>
@@ -90,6 +97,32 @@ function MovieView({ movie, onClose }) {
                       Official Website
                     </a>
                   </p>
+                )}
+
+                {/* NEW: Where to Watch section */}
+                {platforms.length > 0 && (
+                  <div className="platforms">
+                    <h3>Where to Watch</h3>
+                    <div className="platform-list">
+                      {platforms.map((p, index) => (
+                        <a
+                          key={index}
+                          href={p.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="platform-card"
+                        >
+                          <img
+                            src={p.image}
+                            alt={p.platform}
+                            className="platform-logo"
+                          />
+                          <div className="platform-label">{p.label}</div>
+                          <div className="platform-name">{p.platform}</div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             </>
